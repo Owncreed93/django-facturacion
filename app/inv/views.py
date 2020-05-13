@@ -7,6 +7,7 @@ from django.views import generic
 from .models import Categoria
 from .forms import CategoriaForm
 
+
 # Create your views here.
 class CategoriaView(LoginRequiredMixin, generic.ListView):
     model = Categoria
@@ -27,7 +28,8 @@ class CategoriaNew(LoginRequiredMixin, generic.CreateView):
         form.instance.uc = self.request.user
 
         return super().form_valid(form)
-    
+
+
 class CategoriaEdit(LoginRequiredMixin, generic.UpdateView):
     model = Categoria
     template_name = 'inv/categoria_form.html'
@@ -40,3 +42,13 @@ class CategoriaEdit(LoginRequiredMixin, generic.UpdateView):
         form.instance.um = self.request.user.id
 
         return super().form_valid(form)
+
+
+class CategoriaDel(LoginRequiredMixin, generic.DeleteView):
+    model = Categoria
+    template_name = 'inv/catalogos_del.html'
+    context_object_name = 'obj'
+    success_url = reverse_lazy('inv:categoria_list')
+
+
+
