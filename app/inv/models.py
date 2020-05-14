@@ -15,14 +15,14 @@ class Categoria(ClaseModelo):
         verbose_name_plural = "Categorías"
 
     def __str__(self):
-        return f'{self.description}'
+        return f'{self.descripcion}'
 
     def save(self):
         self.descripcion = self.descripcion.upper()
         super(Categoria, self).save()
 
 
-class Subcategoria(ClaseModelo):
+class SubCategoria(ClaseModelo):
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     descripcion = models.CharField(
         max_length=100, 
@@ -38,6 +38,6 @@ class Subcategoria(ClaseModelo):
 
     def save(self):
         self.descripcion = self.descripcion.upper()
-        super(Subcategoria, self).save()
+        super(SubCategoria, self).save()
     
 

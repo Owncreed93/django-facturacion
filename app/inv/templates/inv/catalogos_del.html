@@ -12,7 +12,7 @@
                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">¿ Eliminar "{{ obj.descripcion }}" ?</div>
                         {% comment %} <div class="h5 mb-0 font-weight-bold text-gray-800">18</div> {% endcomment %}
                         <button type="submit" class="btn btn-danger"><i class="far fa-question-circle"></i>Si, eliminar</button>
-                        <a href="{% url 'inv:categoria_list' %}" class="btn btn-success"> <span class="fa fa-undo"></span> Cancelar </a>
+                        <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-success"> <span class="fa fa-undo"></span> Cancelar </a>
                     </div>
 
                     <div class="col-auto">
