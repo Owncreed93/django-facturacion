@@ -41,3 +41,19 @@ class SubCategoria(ClaseModelo):
         super(SubCategoria, self).save()
     
 
+class Marca(ClaseModelo):
+    descripcion = models.CharField(
+        max_length=100, 
+        help_text="Descripción de la marco",
+        unique=True
+    )
+
+    def __str__(self):
+        return f'{self.marca}'
+
+    def save(self):
+        self.descripcion = self.descripcion.upper()
+        super(Marca, self).save()
+
+    class Meta:
+        verbose_name_plural = "Marcas"
