@@ -16,6 +16,11 @@ from .views import (
     MarcaNew,
     MarcaEdit,
     marca_inactivar,
+    # * UNIDADES DE MEDIDA
+    UMView,
+    UMNew,
+    UMEdit,
+    um_inactivar,
 )
 
 urlpatterns = [
@@ -34,4 +39,9 @@ urlpatterns = [
     path('marcas/new', MarcaNew.as_view(), name="marca_new"),
     path('marcas/edit/<int:pk>', MarcaEdit.as_view(), name="marca_edit"),
     path('marcas/inactivar/<int:id>', marca_inactivar, name="marca_inactivar"),
+    # * UNIDADES MEDIDA URL
+    path('unidadesmedida/', UMView.as_view(), name="um_list"),
+    path('unidadesmedida/new', UMNew.as_view(), name="um_new"),
+    path('unidadesmedida/edit/<int:pk>', UMEdit.as_view(), name="um_edit"),
+    path('unidadesmedida/inactivar/<int:id>', um_inactivar, name="um_inactivar"),
 ]
