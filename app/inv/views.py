@@ -270,7 +270,7 @@ def producto_inactivar(request, id):
     # * TEMPLATE PATH
     template_name = 'inv/catalogos_del.html'
 
-    if not um:
+    if not producto:
         return redirect('inv:producto_list')
 
     if request.method == 'GET':
