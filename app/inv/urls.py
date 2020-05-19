@@ -21,6 +21,11 @@ from .views import (
     UMNew,
     UMEdit,
     um_inactivar,
+    # * PRODUCTO
+    ProductoView,
+    ProductNew,
+    ProductoEdit,
+    producto_inactivar,
 )
 
 urlpatterns = [
@@ -44,4 +49,9 @@ urlpatterns = [
     path('unidadesmedida/new', UMNew.as_view(), name="um_new"),
     path('unidadesmedida/edit/<int:pk>', UMEdit.as_view(), name="um_edit"),
     path('unidadesmedida/inactivar/<int:id>', um_inactivar, name="um_inactivar"),
+    # * PRODUCTO
+    path('productos/', ProductoView.as_view(), name="producto_list"),
+    path('productos/new', ProductNew.as_view(), name="producto_new"),
+    path('productos/edit/<int:pk>', ProductoEdit.as_view(), name="producto_edit"),
+    path('producto/inactivar/<int:id>', producto_inactivar, name="producto_inactivar"),
 ]
