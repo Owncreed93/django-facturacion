@@ -1,13 +1,16 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
-# Create your views here.
+
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse
+import json
 
 from .models import Proveedor
-
 from .forms import ProveedorForm
 
+# Create your views here.
 class ProveedorView(LoginRequiredMixin, generic.ListView):
     model = Proveedor
     template_name = 'cmp/proveedor_list.html'
@@ -41,7 +44,7 @@ class ProveedorEdit(LoginRequiredMixin, generic.UpdateView):
 
         return super().form_valid(form)
 
-def proveedor_inactivar(request, id):
+def proveedorInactivar(request, id):
     # * GET THE MARCA OBJECT
     proveedor = Proveedor.objects.filter(pk = id).first()
 
@@ -49,10 +52,10 @@ def proveedor_inactivar(request, id):
     contexto = {}
 
     # * TEMPLATE PATH
-    template_name = 'inv/catalogos_del.html'
+    template_name = 'cmp/inactivar_prv.html'
 
     if not proveedor:
-        return redirect('inv:proveedor_list')
+        return HttpResponse(f'Proveedor no existe {id}.')
 
     if request.method == 'GET':
         contexto = { 'obj' : proveedor }
@@ -60,7 +63,8 @@ def proveedor_inactivar(request, id):
     if request.method == 'POST':
         proveedor.estado = False
         proveedor.save()
+        contexto = {'obj' : 'OK'}
 
-        return redirect('cmp:proveedor_list')
+        return HttpResponse(f'Proveedor {proveedor.descripcion} inactivado.')
 
     return render(request, template_name, contexto)

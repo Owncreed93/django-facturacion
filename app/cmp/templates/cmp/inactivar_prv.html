@@ -1,0 +1,91 @@
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <form method="POST" class="form-inline">
+            {% csrf_token %}
+            <div class="col">
+                <div class="card border-left-danger shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    <div class="alert alert-danger">
+                                        ¿ Inactivar "{{ obj.descripcion }}" ?
+                                    </div>
+                                </div>
+                                {% comment %} <div class="h5 mb-0 font-weight-bold text-gray-800">18</div> {% endcomment %}
+                                <button type="button" id="btnInactivar" class="btn btn-danger"><i class="far fa-question-circle fa-fw"></i>Si, inactivar</button>
+                                <button type="button" class="btn btn-success" onclick="return cerrar_modal()">No, Cancelar</button>
+                            </div>
+
+                            <div class="col-auto">
+                                <i class="far fa-question-circle fa-2x text-gray-300"></i>
+                            </div>
+
+                        </div> 
+                        
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function() {
+
+        let token = $('input[name=csrfmiddlewaretoken]').val()
+
+        // * AJAX SETUP CONFIGURATION
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings){
+                // * SETS THE CSRF TOKEN CAPTURED BEFORE IT IS SENT
+                if(!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))){
+                    xhr.setRequestHeader("X-CSRFToken", token)
+                }
+            }
+        })
+
+        $('#btnInactivar').on('click', function(e) {
+            // Prevents the form to be sent
+            e.preventDefault()
+
+            // alert('Probando antes de hacer la jugada pues bandido XD')
+
+            // CAPTURE THE PROVEEDOR ID 
+            let id = {{ obj.id }};
+
+            // * CAPTURE THE ROUTE AND THE ID
+            let template = "{% url 'cmp:proveedor_inactivar' obj.id %}"
+
+            // * SET THE ID IN A JSON TO BE SENT
+            let data = {"id" : id}
+
+            // * PARSE JSON TO STRING
+            data = JSON.stringify(data)
+
+            // * AJAX METHOD IN JQUERY
+            $.ajax({
+                type : 'POST',
+                url : template,
+                data: data,
+                beforeSend: function(xhr, settings){
+                    $.ajaxSettings.beforeSend(xhr, settings)
+                },
+                success : function(response){
+                    console.log(response)
+                    cerrar_modal()
+                    alert(response)
+                    location.reload()
+                },
+                error : function(jqXHR, textStatus, errorThrow){
+                    console.log(textStatus, errorThrow)
+                    cerrar_modal()
+                }
+            })
+        })
+
+    })
+</script>
+

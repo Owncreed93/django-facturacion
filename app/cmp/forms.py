@@ -9,6 +9,7 @@ class ProveedorForm(forms.ModelForm):
         model = Proveedor
         fields = [ 'descripcion', 'estado', 'direccion', 'contacto', 
             'telefono', 'email', ]
+        exclude = [ 'um', 'fm', 'uc', 'fc' ]
         widget = { 'descripcion' : forms.TextInput }
 
     def __init__(self, *args, **kwargs):

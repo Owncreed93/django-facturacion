@@ -52,8 +52,8 @@
                     <td>{{ item.fc | date:"d/m/Y H:i:s" }}</td>
                     <td>{{ item.fm | date:"d/m/Y H:i:s"}}</td>
                     <td>
-                      <button onclick="return abrir_modal('{% url 'cmp:proveedor_edit' item.id %}')" href="#" class="btn btn-warning btn-circle"> <i class="far fa-edit"></i> </button>
-                      <a href="{% url 'cmp:proveedor_inactivar' item.id %}" class="btn btn-danger btn-circle" role="button"> <i class="fas fa-thumbs-down"></i> </a>
+                      <button class="btn btn-warning btn-circle" onclick="return abrir_modal('{% url 'cmp:proveedor_edit' item.id %}')" href="#" > <i class="far fa-edit"></i> </button>
+                      <button class="btn btn-danger btn-circle" onclick="return abrir_modal('{% url 'cmp:proveedor_inactivar' item.id %}') " href="#" > <i class="fas fa-thumbs-down"></i> </button>
                     </td>
                   </tr>
                 {% endfor %}
