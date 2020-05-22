@@ -59,12 +59,16 @@
             // * CAPTURE THE ROUTE AND THE ID
             let template = "{% url 'cmp:proveedor_inactivar' obj.id %}"
 
+            // template += id
             // * SET THE ID IN A JSON TO BE SENT
             let data = {"id" : id}
 
             // * PARSE JSON TO STRING
             data = JSON.stringify(data)
 
+            function recargar(){
+                location.reload()
+            }
             // * AJAX METHOD IN JQUERY
             $.ajax({
                 type : 'POST',
@@ -76,11 +80,14 @@
                 success : function(response){
                     console.log(response)
                     cerrar_modal()
-                    alert(response)
-                    location.reload()
+                    // alert(response)
+                    let tipo = (response.startsWith('Proveedor no existe') ? 'red' : 'green')
+                    mensaje(response, tipo)
+                    setTimeout(recargar, 7000) 
                 },
                 error : function(jqXHR, textStatus, errorThrow){
                     console.log(textStatus, errorThrow)
+                    mensaje(errorThrow, 'red')
                     cerrar_modal()
                 }
             })

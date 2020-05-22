@@ -65,6 +65,6 @@ def proveedorInactivar(request, id):
         proveedor.save()
         contexto = {'obj' : 'OK'}
 
-        return HttpResponse(f'Proveedor {proveedor.descripcion} inactivado.')
+        return HttpResponse(f'Proveedor \'{proveedor.descripcion}\' inactivado.')
 
     return render(request, template_name, contexto)
