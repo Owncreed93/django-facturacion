@@ -446,6 +446,16 @@
       }
 
       function mensaje(msg, color='green'){
+        if (color == 'success') {
+          color = 'green'
+        }
+        if (color == 'error') {
+          color = 'red'
+        }
+        if (color == 'warning'){
+          color = 'orange'
+        }
+
         $.alert({
           title : '',
           theme: 'material',
@@ -454,6 +464,13 @@
 
         })
       }
+
+      {% if messages %}
+        {% for message in messages  %}
+          console.log("{{ message.tags }}")
+          mensaje("{{ message }}", "{{ message.tags }}")
+        {% endfor %}
+      {% endif %}
 
     </script>
   {% endblock control_modal %}
