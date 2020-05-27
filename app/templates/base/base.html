@@ -70,11 +70,27 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Catálogos de Inventario :</h6>
-            <a class="collapse-item" href="{% url 'inv:categoria_list'%}">Categor&iacute;as</a>
-            <a class="collapse-item" href="{% url 'inv:subcategoria_list'%}">SubCategor&iacute;as</a>
-            <a class="collapse-item" href="{% url 'inv:marca_list'%}">Marcas</a>
-            <a class="collapse-item" href="{% url 'inv:um_list'%}">Unidades de Medida</a>
-            <a class="collapse-item" href="{% url 'inv:producto_list'%}">Producto</a>
+            {% if perms.inv.view_categoria %}
+              <a class="collapse-item" href="{% url 'inv:categoria_list'%}">Categor&iacute;as</a>
+            {% endif %}
+            {% if  perms.inv.view_subcategoria%}
+              <a class="collapse-item" href="{% url 'inv:subcategoria_list'%}">SubCategor&iacute;as</a>
+            {% endif %}
+            {% if perms.inv.view_marca %}
+              <a class="collapse-item" href="{% url 'inv:marca_list'%}">Marcas</a>
+            {% endif %}
+            {% if perms.inv.view_unidadmedida %}
+              <a class="collapse-item" href="{% url 'inv:um_list'%}">Unidades de Medida</a>
+            {% endif %}
+            {% if perms.inv.view_producto %}
+              <a class="collapse-item" href="{% url 'inv:producto_list'%}">Producto</a>
+            {% endif %}
+            
+            <h6 class="collapse-header">Catálogos de Compras :</h6>
+            {% if perms.cmp.view_proveedor %}
+              <a class="collapse-item" href="{% url 'cmp:proveedor_list' %}">Proveedores</a>
+            {% endif %}
+
           </div>
         </div>
       </li>
@@ -83,12 +99,11 @@
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
           <i class="fas fa-fw fa-wrench"></i>
-          <span>Compras </span>
+          <span>Utilities: </span>
         </a>
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Compras:</h6>
-            <a class="collapse-item" href="{% url 'cmp:proveedor_list' %}">Proveedores</a>
+            <h6 class="collapse-header">Utilities:</h6>
             <a class="collapse-item" href="utilities-border.html">Borders</a>
             <a class="collapse-item" href="utilities-animation.html">Animations</a>
             <a class="collapse-item" href="utilities-other.html">Other</a>
