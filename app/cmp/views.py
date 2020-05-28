@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 
-
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponse
 import json
@@ -13,20 +13,19 @@ from .forms import ProveedorForm
 from bases.views import SinPrivilegios
 
 # Create your views here.
-class ProveedorView(LoginRequiredMixin, SinPrivilegios, generic.ListView):
-    permission_required = 'cmp-view_proveedor'
+class ProveedorView(SinPrivilegios, generic.ListView):
+    permission_required = 'cmp.view_proveedor'
     model = Proveedor
     template_name = 'cmp/proveedor_list.html'
     context_object_name = 'obj'
-    login_url = 'bases:login'
 
-class ProveedorNew(LoginRequiredMixin, generic.CreateView):
+class ProveedorNew(SinPrivilegios, generic.CreateView):
+    permission_required = 'cmp.add_proveedor'
     model = Proveedor
     template_name = 'cmp/proveedor_form.html'
     context_object_name = 'obj'
     form_class = ProveedorForm
     success_url = reverse_lazy('cmp:proveedor_list')
-    login_url = 'bases:login'
 
     def form_valid(self, form):
         form.instance.uc = self.request.user
@@ -34,19 +33,22 @@ class ProveedorNew(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
 
-class ProveedorEdit(LoginRequiredMixin, generic.UpdateView):
+class ProveedorEdit(SinPrivilegios, generic.UpdateView):
+    permission_required = 'cmp.change_proveedor'
     model = Proveedor
     template_name = 'cmp/proveedor_form.html'
     context_object_name = 'obj'
     form_class = ProveedorForm
     success_url = reverse_lazy('cmp:proveedor_list')
-    login_url = 'bases:login'
 
     def form_valid(self, form):
         form.instance.um = self.request.user.id
 
         return super().form_valid(form)
 
+
+@login_required(login_url='/login/')
+@permission_required('cmp:change_proveedor', login_url='bases_sin_privilegio')
 def proveedorInactivar(request, id):
     # * GET THE MARCA OBJECT
     proveedor = Proveedor.objects.filter(pk = id).first()

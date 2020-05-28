@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     PermissionRequiredMixin,
@@ -27,21 +28,21 @@ from .forms import (
 from bases.views import SinPrivilegios
 
 # Create your views here.
-class CategoriaView(LoginRequiredMixin, SinPrivilegios, generic.ListView):
+class CategoriaView(SinPrivilegios, generic.ListView):
     permission_required = "inv.view_categoria"
     model = Categoria
     template_name = 'inv/categoria_list.html'
     context_object_name = "obj"
-    login_url = 'bases:login'
+    
 
 
-class CategoriaNew(SuccessMessageMixin, LoginRequiredMixin, generic.CreateView):
+class CategoriaNew(SuccessMessageMixin, SinPrivilegios, generic.CreateView):
+    permission_required = "inv.add_categoria"
     model = Categoria
     template_name = 'inv/categoria_form.html'
     context_object_name = 'obj'
     form_class = CategoriaForm
     success_url = reverse_lazy('inv:categoria_list')
-    login_url = 'bases:login'
     success_message = 'Categoría \'%(descripcion)s\' creada satisfactoriamente.'
 
     def form_valid(self, form):
@@ -50,13 +51,13 @@ class CategoriaNew(SuccessMessageMixin, LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
 
-class CategoriaEdit(SuccessMessageMixin, LoginRequiredMixin, generic.UpdateView):
+class CategoriaEdit(SuccessMessageMixin, SinPrivilegios, generic.UpdateView):
+    permission_required = "inv.change_categoria"
     model = Categoria
     template_name = 'inv/categoria_form.html'
     context_object_name = 'obj'
     form_class = CategoriaForm
     success_url = reverse_lazy('inv:categoria_list')
-    login_url = 'bases:login'
     success_message = 'Categoría \'%(descripcion)s\' modificada satisfactoriamente.'
 
     def form_valid(self, form):
@@ -65,28 +66,28 @@ class CategoriaEdit(SuccessMessageMixin, LoginRequiredMixin, generic.UpdateView)
         return super().form_valid(form)
 
 
-class CategoriaDel(LoginRequiredMixin, generic.DeleteView):
+class CategoriaDel(SinPrivilegios, generic.DeleteView):
+    permission_required = "inv.change_categoria"
     model = Categoria
     template_name = 'inv/catalogos_del.html'
     context_object_name = 'obj'
     success_url = reverse_lazy('inv:categoria_list')
 
 
-class SubCategoriaView(LoginRequiredMixin, SinPrivilegios, generic.ListView):
+class SubCategoriaView(SinPrivilegios, generic.ListView):
     permission_required = "inv.view_subcategoria"
     model = SubCategoria
     template_name = 'inv/subcategoria_list.html'
     context_object_name = "obj"
-    login_url = 'bases:login'
 
 
-class SubCategoriaNew(SuccessMessageMixin, LoginRequiredMixin, generic.CreateView):
+class SubCategoriaNew(SuccessMessageMixin, SinPrivilegios, generic.CreateView):
+    permission_required = "inv.add_subcategoria"
     model = SubCategoria
     template_name = 'inv/subcategoria_form.html'
     context_object_name = 'obj'
     form_class = SubCategoriaForm
     success_url = reverse_lazy('inv:subcategoria_list')
-    login_url = 'bases:login'
     success_message = 'Subcategoría \'%(descripcion)s\'creada satisfactoriamente.'
 
     def form_valid(self, form):
@@ -95,7 +96,8 @@ class SubCategoriaNew(SuccessMessageMixin, LoginRequiredMixin, generic.CreateVie
         return super().form_valid(form)
 
 
-class SubCategoriaEdit(SuccessMessageMixin, LoginRequiredMixin, generic.UpdateView):
+class SubCategoriaEdit(SuccessMessageMixin, SinPrivilegios, generic.UpdateView):
+    permission_required = "inv.change_subcategoria"
     model = SubCategoria
     template_name = 'inv/subcategoria_form.html'
     context_object_name = 'obj'
@@ -109,28 +111,28 @@ class SubCategoriaEdit(SuccessMessageMixin, LoginRequiredMixin, generic.UpdateVi
 
         return super().form_valid(form)
 
-class SubCategoriaDel(LoginRequiredMixin, generic.DeleteView):
+class SubCategoriaDel(SinPrivilegios, generic.DeleteView):
+    permission_required = "inv.delete_subcategoria"
     model = SubCategoria
     template_name = 'inv/catalogos_del.html'
     context_object_name = 'obj'
     success_url = reverse_lazy('inv:subcategoria_list')
 
 
-class MarcaView(LoginRequiredMixin, SinPrivilegios, generic.ListView):
+class MarcaView(SinPrivilegios, generic.ListView):
     permission_required = "inv.view_marca"
     model = Marca
     template_name = 'inv/marca_list.html'
     context_object_name = "obj"
-    login_url = 'bases:login'
 
 
-class MarcaNew(SuccessMessageMixin, LoginRequiredMixin, generic.CreateView):
+class MarcaNew(SuccessMessageMixin, SinPrivilegios, generic.CreateView):
+    permission_required = "inv.add_marca"
     model = Marca
     template_name = 'inv/marca_form.html'
     context_object_name = 'obj'
     form_class = MarcaForm
     success_url = reverse_lazy('inv:marca_list')
-    login_url = 'bases:login'
     success_message = 'Marca \'%(descripcion)s\' creada satisfactoriamente.'
 
     def form_valid(self, form):
@@ -139,13 +141,13 @@ class MarcaNew(SuccessMessageMixin, LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
 
-class MarcaEdit(SuccessMessageMixin, LoginRequiredMixin, generic.UpdateView):
+class MarcaEdit(SuccessMessageMixin, SinPrivilegios, generic.UpdateView):
+    permission_required = "inv.change_marca"
     model = Marca
     template_name = 'inv/marca_form.html'
     context_object_name = 'obj'
     form_class = MarcaForm
     success_url = reverse_lazy('inv:marca_list')
-    login_url = 'bases:login'
     success_message = 'Marca \'%(descripcion)s\' modificada satisfactoriamente.'
 
     def form_valid(self, form):
@@ -153,7 +155,8 @@ class MarcaEdit(SuccessMessageMixin, LoginRequiredMixin, generic.UpdateView):
 
         return super().form_valid(form)
 
-
+@login_required(login_url='/login/')
+@permission_required('inv:change_marca', login_url='bases:sin_privilegios')
 def marca_inactivar(request, id):
     # * GET THE MARCA OBJECT
     marca = Marca.objects.filter(pk = id).first()
@@ -179,21 +182,20 @@ def marca_inactivar(request, id):
     return render(request, template_name, contexto)
 
 
-class UMView(LoginRequiredMixin, SinPrivilegios, generic.ListView):
+class UMView(SinPrivilegios, generic.ListView):
     permission_required = 'inv.view_unidadmedida'
     model = UnidadMedida
     template_name = 'inv/um_list.html'
     context_object_name = "obj"
-    login_url = 'bases:login'
 
 
-class UMNew(LoginRequiredMixin, generic.CreateView):
+class UMNew(SinPrivilegios, generic.CreateView):
+    permission_required = 'inv.add_unidadmedida'
     model = UnidadMedida
     template_name = 'inv/um_form.html'
     context_object_name = 'obj'
     form_class = UMForm
     success_url = reverse_lazy('inv:um_list')
-    login_url = 'bases:login'
 
     def form_valid(self, form):
         form.instance.uc = self.request.user
@@ -201,7 +203,8 @@ class UMNew(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
 
-class UMEdit(LoginRequiredMixin, generic.UpdateView):
+class UMEdit(SinPrivilegios, generic.UpdateView):
+    permission_required = 'inv.change_unidadmedida'
     model = UnidadMedida
     template_name = 'inv/um_form.html'
     context_object_name = 'obj'
@@ -215,6 +218,8 @@ class UMEdit(LoginRequiredMixin, generic.UpdateView):
         return super().form_valid(form)
 
 
+@login_required(login_url='/login/')
+@permission_required('inv:change_unidadmedida', login_url='bases:sin_privilegios')
 def um_inactivar(request, id):
     # * GET THE MARCA OBJECT
     um = UnidadMedida.objects.filter(pk = id).first()
@@ -241,21 +246,20 @@ def um_inactivar(request, id):
 
 
 # * PRODUCTS VIEWS
-class ProductoView(LoginRequiredMixin, SinPrivilegios, generic.ListView):
+class ProductoView(SinPrivilegios, generic.ListView):
     permission_required = 'inv.view_producto'
     model = Producto
     template_name = 'inv/producto_list.html'
     context_object_name = "obj"
-    login_url = 'bases:login'
 
 
-class ProductNew(LoginRequiredMixin, generic.CreateView):
+class ProductNew(SinPrivilegios, generic.CreateView):
+    permission_required = 'inv.add_producto'
     model = Producto
     template_name = 'inv/producto_form.html'
     context_object_name = 'obj'
     form_class = ProductoForm
     success_url = reverse_lazy('inv:producto_list')
-    login_url = 'bases:login'
 
     def form_valid(self, form):
         form.instance.uc = self.request.user
@@ -263,13 +267,13 @@ class ProductNew(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
 
-class ProductoEdit(LoginRequiredMixin, generic.UpdateView):
+class ProductoEdit(SinPrivilegios, generic.UpdateView):
+    permission_required = 'inv.change_producto'
     model = Producto
     template_name = 'inv/producto_form.html'
     context_object_name = 'obj'
     form_class = ProductoForm
     success_url = reverse_lazy('inv:producto_list')
-    login_url = 'bases:login'
 
     def form_valid(self, form):
         form.instance.um = self.request.user.id
@@ -277,6 +281,8 @@ class ProductoEdit(LoginRequiredMixin, generic.UpdateView):
         return super().form_valid(form)
 
 
+@login_required(login_url='/login/')
+@permission_required('inv:change_producto', login_url='bases:sin_privilegios')
 def producto_inactivar(request, id):
     # * GET THE MARCA OBJECT
     producto = Producto.objects.filter(pk = id).first()
