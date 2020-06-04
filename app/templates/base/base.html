@@ -25,6 +25,9 @@
   <!-- jQuery Confirm -->
   <link href="{% static 'base/vendor/jquery-confirm/jquery-confirm.min.css' %}" rel="stylesheet">
 
+  <!-- JQuery XDSoft DateTimePicker-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+
 </head>
 
 <body id="page-top" class="bg-gradient-primary">
@@ -90,7 +93,21 @@
             {% if perms.cmp.view_proveedor %}
               <a class="collapse-item" href="{% url 'cmp:proveedor_list' %}">Proveedores</a>
             {% endif %}
+          </div>
+        </div>
+      </li>
 
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCompras" aria-expanded="true" aria-controls="collapseCompras">
+          <i class="fas fa-fw fa-truck"></i>
+          <span>Movimientos</span>
+        </a>
+        <div id="collapseCompras" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Entradas :</h6>
+            {% if perms.cmp.view_comprasenc %}
+              <a class="collapse-item" href="{% url 'cmp:compras_list' %}">Compras</a>
+            {% endif %}
           </div>
         </div>
       </li>
@@ -433,6 +450,14 @@
   <!-- jQuery Confirm -->
   <script src="{% static 'base/vendor/jquery-confirm/jquery-confirm.min.js' %}"> </script>
 
+  <!-- JQuery XDSoft DateTimePickers -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script> 
+
+  <script>
+     $(document).ready(function () {  
+           jQuery.datetimepicker.setLocale('es')
+     })
+  </script>
   {% block control_modal %}
     <script>
 

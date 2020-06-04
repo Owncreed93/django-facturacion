@@ -5,6 +5,8 @@ from .views import (
     ProveedorNew,
     ProveedorEdit,
     proveedorInactivar,
+    ComprasEncView,
+    compras
 )
 
 urlpatterns = [
@@ -13,4 +15,8 @@ urlpatterns = [
     path('proveedores/new', ProveedorNew.as_view(), name='proveedor_new'),
     path('proveedores/edit/<int:pk>', ProveedorEdit.as_view(), name='proveedor_edit'),
     path('proveedores/inactivar/<int:id>', proveedorInactivar, name="proveedor_inactivar"),
+    # * COMPRAS ENCABEZADO
+    path('compras/', ComprasEncView.as_view(), name='compras_list'),
+    path('compras/new', compras, name='compras_new'),
+
 ]
