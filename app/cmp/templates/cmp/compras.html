@@ -187,12 +187,12 @@
                                                 <tr>
                                                     <td>{{ item.producto }}</td>
                                                     <td>{{ item.cantidad }}</td>
-                                                    <td>{{ item.precio }}</td>
+                                                    <td>{{ item.precio_prv }}</td>
                                                     <td>{{ item.sub_total }}</td>
                                                     <td>{{ item.descuento }}</td>
                                                     <td>{{ item.total }}</td>
                                                     <td>
-                                                        <button class="btn btn-danger btn-circle"><i class="fas fa-trash-alt"></i></button>
+                                                        <button type="button" class="btn btn-danger btn-circle" onclick="return abrir_modal('{% url 'cmp:compras_del' encabezado.pk item.id %}')"><i class="fas fa-trash-alt"></i></button>
                                                     </td>
                                                 </tr>
                                             {% endfor %}
@@ -249,6 +249,24 @@
             $('#id_cantidad_detalle, #id_precio_detalle, #id_descuento_detalle').change(function() {
                 calcular_detalle()
             })
+
+            // * VALIDAR ENVÍO DE DETALLE *//
+            $('#frmCompras').submit(function(e){
+                if($('#id_total_detalle').val() == 0 || $('#id_id_producto').val() == 0){
+
+                    // * PREVENTS THE FORM TO BE SEND
+                    e.preventDefault();
+
+                    // * TRIGGERS THE ALERT
+                    $.alert({
+                        type: 'red',
+                        title: '',
+                        content: 'No ha agregado producto o está sin cantidades'
+                    })
+                }
+            })
+            // * ENVÍO DE DETALLE *//
+
 
         })
 

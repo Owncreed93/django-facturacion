@@ -43,7 +43,7 @@
                 {% for item in obj  %}
                   <tr>
                     <td>{{ item.id }}</td>
-                    <td>{{ item.fecha_compra | date:"d/m/Y H:i:s"}}</td>
+                    <td>{{ item.fecha_compra | date:"d/m/Y"}}</td>
                     <td>{{ item.observacion }}</td>
                     <td>{{ item.no_factura }}</td>
                     <td>{{ item.fecha_factura }}</td>
@@ -52,7 +52,7 @@
                     <td>{{ item.total }}</td>
                     <td>{{ item.estado |yesno:"Activo, Inactivo" }}</td>
                     <td>
-                      <a class="btn btn-warning btn-circle" href="#" > <i class="far fa-edit"></i> </a>
+                      <a class="btn btn-warning btn-circle" href="{% url 'cmp:compras_edit' item.id %}" > <i class="far fa-edit"></i> </a>
                       <a class="btn btn-danger btn-circle" href="#" > <i class="fas fa-thumbs-down"></i> </a>
                     </td>
                   </tr>

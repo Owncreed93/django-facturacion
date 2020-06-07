@@ -1,6 +1,12 @@
 from django.db import models
 
+# IMPORT SIGNALS
+from django.db.models import Sum
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
 
+
+# IMPORT
 from bases.models import ClaseModelo
 from inv.models import Producto
 
@@ -60,7 +66,7 @@ class ComprasEnc(ClaseModelo):
 
     def save(self):
         self.observacion = self.observacion.upper()
-        self.total = self.sub_total + self.descuento
+        self.total = self.sub_total - self.descuento
         super(ComprasEnc, self).save()
 
 
@@ -84,9 +90,54 @@ class ComprasDet(ClaseModelo):
 
     def save(self):
         self.subtotal = float( float(int(self.cantidad )) * float(self.precio_prv) )
-        self.total = self.sub_total - float(self.descuento)
+        self.total = float(self.sub_total) - float(self.descuento)
         super(ComprasDet, self).save()
 
     class Meta:
         verbose_name_plural = "Detalle Compras"
         verbose_name = "Detalle Compra"
+
+
+# * SIGNAL TO INFORM WHEN A PRODUCT IS DELETED FROM THE RECEIPT
+@receiver(post_delete, sender=ComprasDet)
+def detalle_compra_borrar(sender, instance, **kwargs):
+
+    if instance.producto.id:
+        id_producto = instance.producto.id
+
+    if instance.compra.id:
+        id_compra = instance.compra.id
+
+    enc = ComprasEnc.objects.filter(pk=id_compra).first()
+
+    if enc:
+        sub_total = ComprasDet.objects.filter(compra = id_compra).aggregate(Sum('sub_total'))
+        descuento = ComprasDet.objects.filter(compra = id_compra).aggregate(Sum('descuento'))
+        enc.sub_total = sub_total['sub_total__sum']
+        enc.descuento = descuento['descuento__sum']
+        enc.save()
+    
+    prod = Producto.objects.filter(pk=id_producto).first()
+
+    if prod:
+        cantidad = int(prod.existencia) - int(instance.cantidad)
+
+        prod.existencia = cantidad
+
+        prod.save()
+
+# * SIGNAL TO INFORM WHEN A PRODUCT IS BOUGHT
+@receiver(post_save, sender=ComprasDet)
+def detalle_compra_guardar(sender, instance, **kwargs):
+    id_producto = instance.producto.id
+    fecha_compra = instance.compra.fecha_compra
+
+    prod = Producto.objects.filter(pk=id_producto).first()
+
+    if prod:
+        cantidad = int(prod.existencia) + int(instance.cantidad)
+        prod.existencia = cantidad
+        prod.ultima_compra = fecha_compra
+        prod.save()
+    
+
