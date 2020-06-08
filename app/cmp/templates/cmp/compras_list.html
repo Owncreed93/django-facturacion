@@ -13,6 +13,7 @@
             <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(17px, 19px, 0px);">
               <div class="dropdown-header">Acciones :</div>
                 <a class="dropdown-item" href="{% url 'cmp:compras_new' %}"><i class="far fa-calendar-plus fa-fw" ></i>Nueva</a>
+                <a class="dropdown-item" href="{% url 'cmp:compras_print_all' %}" target="reportes"><i class="fas fa-print fa-fw" ></i>Listado</a>
               <a class="dropdown-item" href="#">Another action</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="#">Something else here</a>
@@ -53,7 +54,7 @@
                     <td>{{ item.estado |yesno:"Activo, Inactivo" }}</td>
                     <td>
                       <a class="btn btn-warning btn-circle" href="{% url 'cmp:compras_edit' item.id %}" > <i class="far fa-edit"></i> </a>
-                      <a class="btn btn-danger btn-circle" href="#" > <i class="fas fa-thumbs-down"></i> </a>
+                      <a class="btn btn-success btn-circle" href="{% url 'cmp:compras_print_one' item.id %}" target="reportes"> <i class="fas fa-print"></i> </a>
                     </td>
                   </tr>
                 {% endfor %}
