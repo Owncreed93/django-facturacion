@@ -12,7 +12,7 @@
             </a>
             <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(17px, 19px, 0px);">
               <div class="dropdown-header">Acciones :</div>
-              <a class="dropdown-item" onclick="return abrir_modal('{# url 'cmp:proveedor_new' #}')" href="#"><i class="far fa-calendar-plus fa-fw" ></i>Nuevo</a>
+              <a class="dropdown-item" onclick="return abrir_modal('{% url 'fac:cliente_new' %}')" href="#"><i class="far fa-calendar-plus fa-fw" ></i>Nuevo</a>
               <a class="dropdown-item" href="#">Another action</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="#">Something else here</a>
@@ -34,9 +34,6 @@
                         <th>Tipo</th>
                         <th>Tel&eacute;fono</th>
                         <th>Estado</th>
-                        <th>F. Creado</th>
-                        <th>F. Modif</th>
-                        <th class="all">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,8 +46,8 @@
                     <td>{{ item.celular }}</td>
                     <td>{{ item.estado|yesno:"Activo, Inactivo" }}</td>
                     <td>
-                      <button class="btn btn-warning btn-circle" onclick="return abrir_modal('{# url 'cmp:proveedor_edit' item.id #}')" href="#" > <i class="far fa-edit"></i> </button>
-                      <button class="btn btn-danger btn-circle" onclick="return abrir_modal('{# url 'cmp:proveedor_inactivar' item.id #}') " href="#" > <i class="fas fa-thumbs-down"></i> </button>
+                      <button class="btn btn-warning btn-circle" onclick="return abrir_modal('{% url 'fac:cliente_edit' item.id %}')" href="#" > <i class="far fa-edit"></i> </button>
+                      <button class="btn btn-danger btn-circle" onclick="return abrir_modal('{# url 'fac:cliente_inactivar' item.id #}') " href="#" > <i class="fas fa-thumbs-down"></i> </button>
                     </td>
                   </tr>
                 {% endfor %}
