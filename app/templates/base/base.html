@@ -89,9 +89,14 @@
               <a class="collapse-item" href="{% url 'inv:producto_list'%}">Producto</a>
             {% endif %}
             
-            <h6 class="collapse-header">Catálogos de Compras :</h6>
+            <h6 class="collapse-header">Cat&aacute;logos de Compras :</h6>
             {% if perms.cmp.view_proveedor %}
               <a class="collapse-item" href="{% url 'cmp:proveedor_list' %}">Proveedores</a>
+            {% endif %}
+
+            <h6 class="collapse-header">Cat&aacute;logos de Faturaci&oacute;n :</h6>
+            {% if perms.fac.view_cliente %}
+              <a class="collapse-item" href="{% url 'fac:cliente_list' %}">Proveedores</a>
             {% endif %}
           </div>
         </div>
