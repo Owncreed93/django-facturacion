@@ -1,6 +1,11 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views import generic
+from django.views.generic import (
+    ListView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+)
 import datetime
 
 
@@ -21,43 +26,35 @@ from .forms import (
     ComprasEncForm,
 )
 
-from bases.views import SinPrivilegios
+from bases.views import (
+    SinPrivilegios,
+    VistaBaseCreate,
+    VistaBaseEdit,
+)
 
 from inv.models import Producto
 
 # Create your views here.
-class ProveedorView(SinPrivilegios, generic.ListView):
+class ProveedorView(SinPrivilegios, ListView):
     permission_required = 'cmp.view_proveedor'
     model = Proveedor
     template_name = 'cmp/proveedor_list.html'
     context_object_name = 'obj'
 
-class ProveedorNew(SinPrivilegios, generic.CreateView):
+class ProveedorNew(VistaBaseCreate):
     permission_required = 'cmp.add_proveedor'
     model = Proveedor
     template_name = 'cmp/proveedor_form.html'
-    context_object_name = 'obj'
     form_class = ProveedorForm
     success_url = reverse_lazy('cmp:proveedor_list')
 
-    def form_valid(self, form):
-        form.instance.uc = self.request.user
 
-        return super().form_valid(form)
-
-
-class ProveedorEdit(SinPrivilegios, generic.UpdateView):
+class ProveedorEdit(VistaBaseEdit):
     permission_required = 'cmp.change_proveedor'
     model = Proveedor
     template_name = 'cmp/proveedor_form.html'
-    context_object_name = 'obj'
     form_class = ProveedorForm
     success_url = reverse_lazy('cmp:proveedor_list')
-
-    def form_valid(self, form):
-        form.instance.um = self.request.user.id
-
-        return super().form_valid(form)
 
 
 @login_required(login_url='/login/')
@@ -88,7 +85,7 @@ def proveedorInactivar(request, id):
     return render(request, template_name, contexto)
 
 
-class ComprasEncView(SinPrivilegios, generic.ListView):
+class ComprasEncView(SinPrivilegios, ListView):
     model = ComprasEnc
     template_name = 'cmp/compras_list.html'
     context_object_name = 'obj'
@@ -175,13 +172,7 @@ def compras(request, compra_id=None):
         producto = request.POST.get('id_id_producto')
         cantidad = request.POST.get('id_cantidad_detalle')
         precio = request.POST.get('id_precio_detalle')
-        print('**************************')
-        print(precio)
-        print('**************************')
         sub_total_detalle = request.POST.get('id_sub_total_detalle')
-        print('**************************')
-        print(sub_total_detalle)
-        print('**************************')
         descuento_detalle = request.POST.get('id_descuento_detalle')
         total_detalle = request.POST.get('id_total_detalle')
 
@@ -203,10 +194,6 @@ def compras(request, compra_id=None):
 
             sub_total = ComprasDet.objects.filter(compra=compra_id).aggregate(Sum('sub_total'))
             descuento = ComprasDet.objects.filter(compra=compra_id).aggregate(Sum('descuento'))
-            print('*****************************')
-            print(sub_total)
-            print(descuento)
-            print('*****************************')
 
             enc.sub_total = sub_total["sub_total__sum"]
 
@@ -219,7 +206,7 @@ def compras(request, compra_id=None):
 
     return render(request, template_name, contexto)
 
-class ComprasDetDelete(SinPrivilegios, generic.DeleteView):
+class ComprasDetDelete(SinPrivilegios, DeleteView):
     permission_required = 'cmp.delete_comprasdet'
     model = ComprasDet
     template_name = 'cmp/compras_det_del.html'
