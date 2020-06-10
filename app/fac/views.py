@@ -1,4 +1,6 @@
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
@@ -48,3 +50,17 @@ class ClienteEdit(VistaBaseEdit):
     form_class = ClienteForm
     success_url = reverse_lazy('fac:cliente_list')
     permission_required = 'fac.change_cliente'
+
+@login_required(login_url="/login/")
+@permission_required("fac.change_cliente", login_url='/login/')
+def clienteInactivar(request, id):
+    cliente = Cliente.objects.filter(pk=id).first()
+
+    if request.method == 'POST':
+        if cliente:
+            cliente.estado = not cliente.estado
+            cliente.save()
+            return HttpResponse('OK')
+    return HttpResponse('FAIL')   
+    
+    return HttpResponse('FAIL')

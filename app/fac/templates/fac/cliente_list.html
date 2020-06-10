@@ -44,10 +44,17 @@
                     <td>{{ item.apellidos }}</td>
                     <td>{{ item.tipo }}</td>
                     <td>{{ item.celular }}</td>
-                    <td>{{ item.estado|yesno:"Activo, Inactivo" }}</td>
+                    <td onclick="inactivar({{item.id}})">
+                      {# item.estado|yesno:"Activo, Inactivo" #}
+                      {% if item.estado %}
+                        <i class="far fa-thumbs-up text-primary"></i>
+                      {% else %}
+                        <i class="far fa-thumbs-down text-danger"></i>
+                      {% endif %}
+                      </td>
                     <td>
                       <button class="btn btn-warning btn-circle" onclick="return abrir_modal('{% url 'fac:cliente_edit' item.id %}')" href="#" > <i class="far fa-edit"></i> </button>
-                      <button class="btn btn-danger btn-circle" onclick="return abrir_modal('{# url 'fac:cliente_inactivar' item.id #}') " href="#" > <i class="fas fa-thumbs-down"></i> </button>
+                      {% comment %} <button class="btn btn-danger btn-circle" onclick="return abrir_modal('{# url 'fac:cliente_inactivar' item.id #}') " href="#" > <i class="fas fa-thumbs-down"></i> </button> {% endcomment %}
                     </td>
                   </tr>
                 {% endfor %}
@@ -62,6 +69,39 @@
 
 {% block js_page %}
     <script>
+      function inactivar(id){
+
+        let data = {id:id}
+
+        data = JSON.stringify(data)
+
+        let token = '{{ csrf_token }}'
+
+        // alert(`- El token es : ${token} \n- El id es : ${id}`)
+
+        $.ajax({
+          headers : {
+            "x-CSRFToken": token
+          },
+          type : 'POST',
+          url: `/fac/clientes/estado/${id}`,
+          data: data,
+          success: function(response){
+            if(response === 'OK'){
+              location.reload(true)
+            } else {
+              mensaje('Error Intentando Cambiar Estado a Cliente')
+            }
+          },
+          error: function(jqHR, textStatus, errorThrow){
+            console.log(textStatus, errorThrow)
+            mensaje(errorThrow, 'red')
+            cerrar_modal()
+          }
+        })
+
+      }
+
       // Call the dataTables jQuery plugin
       $(document).ready(function (){
         $('.table').DataTable()
