@@ -7,6 +7,7 @@ from django.views.generic import (
     TemplateView,
     CreateView,
     UpdateView,
+    DeleteView,
 )
 
 # Create your views here.
@@ -48,3 +49,8 @@ class VistaBaseEdit(SuccessMessageMixin, SinPrivilegios, UpdateView):
     def form_valid(self, form):
         form.instance.um = self.request.user.id
         return super().form_valid(form)
+
+
+class VistaBaseDelete(SuccessMessageMixin, SinPrivilegios, DeleteView):
+    context_object_name = 'obj'
+    success_message = 'Registro eliminado satisfactoriamente'
