@@ -24,16 +24,82 @@
           {% if not obj %}
             <div class="alert alert-info">No hay Clientes</div>
           {% else %}
-            <table class="table table-stripped table-hover">
-                <thead>
+            <div class="toolbar">
+              <a class="dropdown-item" onclick="return abrir_modal('{% url 'fac:cliente_new' %}')" href="#"><i class="far fa-calendar-plus fa-fw" ></i>Nuevo</a>
+            </div>
+            <div class="toolbar">
+              <select class="form-control" id="locale">
+                <option value="af-ZA">af-ZA</option>
+                <option value="ar-SA">ar-SA</option>
+                <option value="ca-ES">ca-ES</option>
+                <option value="cs-CZ">cs-CZ</option>
+                <option value="da-DK">da-DK</option>
+                <option value="de-DE">de-DE</option>
+                <option value="el-GR">el-GR</option>
+                <option value="en-US">en-US</option>
+                <option value="es-AR">es-AR</option>
+                <option value="es-CL">es-CL</option>
+                <option value="es-CR">es-CR</option>
+                <option value="es-ES">es-ES</option>
+                <option value="es-MX">es-MX</option>
+                <option value="es-NI">es-NI</option>
+                <option value="es-SP">es-SP</option>
+                <option value="et-EE">et-EE</option>
+                <option value="eu-EU">eu-EU</option>
+                <option value="fa-IR">fa-IR</option>
+                <option value="fi-FI">fi-FI</option>
+                <option value="fr-BE">fr-BE</option>
+                <option value="fr-FR">fr-FR</option>
+                <option value="he-IL">he-IL</option>
+                <option value="hr-HR">hr-HR</option>
+                <option value="hu-HU">hu-HU</option>
+                <option value="id-ID">id-ID</option>
+                <option value="it-IT">it-IT</option>
+                <option value="ja-JP">ja-JP</option>
+                <option value="ka-GE">ka-GE</option>
+                <option value="ko-KR">ko-KR</option>
+                <option value="ms-MY">ms-MY</option>
+                <option value="nb-NO">nb-NO</option>
+                <option value="nl-NL">nl-NL</option>
+                <option value="pl-PL">pl-PL</option>
+                <option value="pt-BR">pt-BR</option>
+                <option value="pt-PT">pt-PT</option>
+                <option value="ro-RO">ro-RO</option>
+                <option value="ru-RU">ru-RU</option>
+                <option value="sk-SK">sk-SK</option>
+                <option value="sv-SE">sv-SE</option>
+                <option value="th-TH">th-TH</option>
+                <option value="tr-TR">tr-TR</option>
+                <option value="uk-UA">uk-UA</option>
+                <option value="ur-PK">ur-PK</option>
+                <option value="uz-Latn-UZ">uz-Latn-UZ</option>
+                <option value="vi-VN">vi-VN</option>
+                <option value="zh-CN" selected>zh-CN</option>
+                <option value="zh-TW">zh-TW</option>
+              </select>
+            </div>
+            <table 
+                   id="table"
+                   data-toggle="table" 
+                   data-pagination="true"
+                   data-search="true"
+                   data-show-columns="true"
+                   data-search-text=""
+                   data-show-toggle="true"
+                   data-show-fullscreen="true"
+                   data-toolbar=".toolbar"
+                   data-locale="es-ES"
+                   >
+                   
+                <thead >
                     <tr>
-                        <th>Id</th>
-                        <th>Nombre</th>
-                        <th>Apellidos</th>
-                        <th>Contacto</th>
-                        <th>Tipo</th>
-                        <th>Tel&eacute;fono</th>
-                        <th>Estado</th>
+                        <th data-field="id" data-sortable="true">Id</th>
+                        <th data-field="nombres" data-sortable="true">Nombres</th>
+                        <th data-field="apellidos" data-sortable="true">Apellidos</th>
+                        <th data-field="tipo" data-sortable="true">Tipo</th>
+                        <th data-field="telefono">Tel&eacute;fono</th>
+                        <th data-field="estado">Estado</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,14 +110,16 @@
                     <td>{{ item.apellidos }}</td>
                     <td>{{ item.tipo }}</td>
                     <td>{{ item.celular }}</td>
-                    <td onclick="inactivar({{item.id}})">
+                    <td>
                       {# item.estado|yesno:"Activo, Inactivo" #}
-                      {% if item.estado %}
-                        <i class="far fa-thumbs-up text-primary"></i>
-                      {% else %}
-                        <i class="far fa-thumbs-down text-danger"></i>
-                      {% endif %}
-                      </td>
+                      <div onclick="inactivar({{item.id}})">
+                        {% if item.estado %}
+                          <i class="far fa-thumbs-up text-primary"></i>
+                        {% else %}
+                          <i class="far fa-thumbs-down text-danger"></i>
+                        {% endif %}
+                      </div>
+                    </td>
                     <td>
                       <button class="btn btn-warning btn-circle" onclick="return abrir_modal('{% url 'fac:cliente_edit' item.id %}')" href="#" > <i class="far fa-edit"></i> </button>
                       {% comment %} <button class="btn btn-danger btn-circle" onclick="return abrir_modal('{# url 'fac:cliente_inactivar' item.id #}') " href="#" > <i class="fas fa-thumbs-down"></i> </button> {% endcomment %}
@@ -100,11 +168,25 @@
           }
         })
 
+        
+
       }
 
-      // Call the dataTables jQuery plugin
-      $(document).ready(function (){
-        $('.table').DataTable()
+      let $table = $('#table')
+
+      $(function() {
+        $table.bootstrapTable()
+
+        $('#locale').change(function () {
+          $table.bootstrapTable('refreshOptions', {
+            locale: $(this).val()
+          })
+        })
       })
+
+      // Call the dataTables jQuery plugin
+      {% comment %} $(document).ready(function (){
+        $('.table').DataTable()
+      }) {% endcomment %}
     </script>
 {% endblock js_page %}
