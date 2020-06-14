@@ -101,6 +101,9 @@
             {% if perms.fac.view_cliente %}
               <a class="collapse-item" href="{% url 'fac:cliente_list' %}">Clientes</a>
             {% endif %}
+            {% if perms.fac.view_facturaenc %}
+              <a class="collapse-item" href="{% url 'fac:factura_list' %}">Facturas</a>
+            {% endif %}
           </div>
         </div>
       </li>
@@ -140,9 +143,11 @@
       <hr class="sidebar-divider">
 
       <!-- Heading -->
+      <!--
       <div class="sidebar-heading">
         Entradas
       </div>
+      -->
 
       <!-- Nav Item - Pages Collapse Menu 
       <li class="nav-item active">

@@ -1,0 +1,183 @@
+{% extends 'base/base.html' %}
+
+{% block page_content %}
+
+    <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Listado de Facturas</h6>
+          {% comment %} <div class="dropdown no-arrow">
+            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(17px, 19px, 0px);">
+              <div class="dropdown-header">Acciones :</div>
+              <a class="dropdown-item" onclick="return abrir_modal('{% url 'fac:cliente_new' %}')" href="#"><i class="far fa-calendar-plus fa-fw" ></i>Nuevo</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </div> {% endcomment %}
+        </div>
+        <!-- Card Body -->
+        <div class="card-body">
+          {% if not obj %}
+            <div class="alert alert-info">No hay Facturas</div>
+          {% endif %}
+            <div class="toolbar">
+              <a class="btn btn-success" href="{% url 'fac:factura_new' %}">Nueva</a>
+            </div>
+            
+            <div class="toolbar">
+              <select class="form-control" id="locale">
+                <option value="af-ZA">af-ZA</option>
+                <option value="ar-SA">ar-SA</option>
+                <option value="ca-ES">ca-ES</option>
+                <option value="cs-CZ">cs-CZ</option>
+                <option value="da-DK">da-DK</option>
+                <option value="de-DE">de-DE</option>
+                <option value="el-GR">el-GR</option>
+                <option value="en-US">en-US</option>
+                <option value="es-AR">es-AR</option>
+                <option value="es-CL">es-CL</option>
+                <option value="es-CR">es-CR</option>
+                <option value="es-ES">es-ES</option>
+                <option value="es-MX">es-MX</option>
+                <option value="es-NI">es-NI</option>
+                <option value="es-SP">es-SP</option>
+                <option value="et-EE">et-EE</option>
+                <option value="eu-EU">eu-EU</option>
+                <option value="fa-IR">fa-IR</option>
+                <option value="fi-FI">fi-FI</option>
+                <option value="fr-BE">fr-BE</option>
+                <option value="fr-FR">fr-FR</option>
+                <option value="he-IL">he-IL</option>
+                <option value="hr-HR">hr-HR</option>
+                <option value="hu-HU">hu-HU</option>
+                <option value="id-ID">id-ID</option>
+                <option value="it-IT">it-IT</option>
+                <option value="ja-JP">ja-JP</option>
+                <option value="ka-GE">ka-GE</option>
+                <option value="ko-KR">ko-KR</option>
+                <option value="ms-MY">ms-MY</option>
+                <option value="nb-NO">nb-NO</option>
+                <option value="nl-NL">nl-NL</option>
+                <option value="pl-PL">pl-PL</option>
+                <option value="pt-BR">pt-BR</option>
+                <option value="pt-PT">pt-PT</option>
+                <option value="ro-RO">ro-RO</option>
+                <option value="ru-RU">ru-RU</option>
+                <option value="sk-SK">sk-SK</option>
+                <option value="sv-SE">sv-SE</option>
+                <option value="th-TH">th-TH</option>
+                <option value="tr-TR">tr-TR</option>
+                <option value="uk-UA">uk-UA</option>
+                <option value="ur-PK">ur-PK</option>
+                <option value="uz-Latn-UZ">uz-Latn-UZ</option>
+                <option value="vi-VN">vi-VN</option>
+                <option value="zh-CN" selected>zh-CN</option>
+                <option value="zh-TW">zh-TW</option>
+              </select>
+            </div>
+            <table 
+                   id="table"
+                   data-toggle="table" 
+                   data-pagination="true"
+                   data-search="true"
+                   data-show-columns="true"
+                   data-search-text=""
+                   data-show-toggle="true"
+                   data-show-fullscreen="true"
+                   data-toolbar=".toolbar"
+                   data-locale="es-ES"
+                   >
+                   
+                <thead >
+                    <tr>
+                        <th data-field="id" data-sortable="true">No.</th>
+                        <th data-field="cliente" data-sortable="true">Cliente</th>
+                        <th data-field="total" data-sortable="true">Total</th>
+                        <th data-field="tipo" data-sortable="true">Tipo</th>
+                        <th data-field="estado">Estado</th>
+                        <th class="all">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for item in obj  %}
+                  <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.cliente }}</td>
+                    <td>{{ item.total }}</td>
+                    <td>{{ item.tipo }}</td>
+                    <td>{{ item.estado|yesno:"Activo,Inactivo" }}</td>
+                    <td>
+                      <a href="#" class="href btn btn-warning btn-circle">
+                          <i class="far fa-edit"></i>
+                      </a>
+                    </td>
+                  </tr>
+                {% endfor %}
+                
+                </tbody>
+            </table>
+          
+        </div>
+    </div>
+
+{% endblock page_content %}
+
+{% block js_page %}
+    <script>
+      function inactivar(id){
+
+        let data = {id:id}
+
+        data = JSON.stringify(data)
+
+        let token = '{{ csrf_token }}'
+
+        // alert(`- El token es : ${token} \n- El id es : ${id}`)
+
+        $.ajax({
+          headers : {
+            "x-CSRFToken": token
+          },
+          type : 'POST',
+          url: `/fac/clientes/estado/${id}`,
+          data: data,
+          success: function(response){
+            if(response === 'OK'){
+              location.reload(true)
+            } else {
+              mensaje('Error Intentando Cambiar Estado a Cliente')
+            }
+          },
+          error: function(jqHR, textStatus, errorThrow){
+            console.log(textStatus, errorThrow)
+            mensaje(errorThrow, 'red')
+            cerrar_modal()
+          }
+        })
+
+        
+
+      }
+
+      let $table = $('#table')
+
+      $(function() {
+        $table.bootstrapTable()
+
+        $('#locale').change(function () {
+          $table.bootstrapTable('refreshOptions', {
+            locale: $(this).val()
+          })
+        })
+      })
+
+      // Call the dataTables jQuery plugin
+      {% comment %} $(document).ready(function (){
+        $('.table').DataTable()
+      }) {% endcomment %}
+    </script>
+{% endblock js_page %}
