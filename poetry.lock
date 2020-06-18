@@ -73,6 +73,17 @@ version = "0.3.0"
 
 [[package]]
 category = "main"
+description = "Web APIs for Django, made easy."
+name = "djangorestframework"
+optional = false
+python-versions = ">=3.5"
+version = "3.11.0"
+
+[package.dependencies]
+django = ">=1.11"
+
+[[package]]
+category = "main"
 description = "HTML parser based on the WHATWG HTML specification"
 name = "html5lib"
 optional = false
@@ -358,7 +369,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "55faaf0c586a196893992c355d3f1819121aa79baf54cda1b012fc11fc8b2ca9"
+content-hash = "c5f5e83d9802ecf6cdb37ea3b3017738ac5a948327a3e5d9971185c6848c4078"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -384,6 +395,10 @@ django = [
 ]
 django-userforeignkey = [
     {file = "django-userforeignkey-0.3.0.tar.gz", hash = "sha256:b5a675f1f09ca9b8c32a174caf7780f524f363c7d1c8ae0d30fdd0ce13268ca6"},
+]
+djangorestframework = [
+    {file = "djangorestframework-3.11.0-py3-none-any.whl", hash = "sha256:05809fc66e1c997fd9a32ea5730d9f4ba28b109b9da71fccfa5ff241201fd0a4"},
+    {file = "djangorestframework-3.11.0.tar.gz", hash = "sha256:e782087823c47a26826ee5b6fa0c542968219263fb3976ec3c31edab23a4001f"},
 ]
 html5lib = [
     {file = "html5lib-1.0.1-py2.py3-none-any.whl", hash = "sha256:20b159aa3badc9d5ee8f5c647e5efd02ed2a66ab8d354930bd9ff139fc1dc0a3"},

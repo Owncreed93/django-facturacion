@@ -9,6 +9,7 @@ from django.views.generic import (
     UpdateView,
 )
 
+from datetime import datetime
 
 from bases.views import (
     SinPrivilegios,
@@ -22,6 +23,7 @@ from .models import (
 )
 from .forms import ClienteForm
 
+from inv.views import ProductoView
 
 # Create your views here.
 class ClienteView(SinPrivilegios, ListView):
@@ -71,5 +73,25 @@ class FacturaView(SinPrivilegios, ListView):
 @permission_required('fac.change_facturaenc', login_url='bases:sin_privilegios')
 def facturas(request, id=None):
     template_name = 'fac/facturas.html'
-    contexto = {}
+
+    encabezado = {
+        'fecha' : datetime.today()
+    }
+
+    detalle = {
+
+    }
+
+    clientes = Cliente.objects.filter(estado=True)
+
+    contexto = {
+        'enc' : encabezado,
+        'det' : detalle,
+        'clientes' : clientes
+    }
+
     return render(request, template_name, contexto)
+
+
+class ProductoView(ProductoView):
+    template_name = 'fac/buscar_producto.html'

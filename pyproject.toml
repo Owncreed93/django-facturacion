@@ -11,6 +11,7 @@ pylint = "^2.5.2"
 psycopg2 = "^2.8.5"
 xhtml2pdf = "^0.2.4"
 django-userforeignkey = "^0.3.0"
+djangorestframework = "^3.11.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
