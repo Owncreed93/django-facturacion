@@ -97,27 +97,28 @@
                         <th data-field="id" data-sortable="true">No.</th>
                         <th data-field="cliente" data-sortable="true">Cliente</th>
                         <th data-field="total" data-sortable="true">Total</th>
-                        <th data-field="tipo" data-sortable="true">Tipo</th>
+                        <th data-field="tipo" data-sortable="true">Sub Total</th>
+                        <th data-field="tipo" data-sortable="true">Descuento</th>
                         <th data-field="estado">Estado</th>
                         <th class="all">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                {% for item in obj  %}
+                <tbody>                
+                {% for item in obj %} 
                   <tr>
                     <td>{{ item.id }}</td>
                     <td>{{ item.cliente }}</td>
                     <td>{{ item.total }}</td>
-                    <td>{{ item.tipo }}</td>
+                    <td>{{ item.sub_total }}</td>
+                    <td>{{ item.descuento }}</td>
                     <td>{{ item.estado|yesno:"Activo,Inactivo" }}</td>
                     <td>
-                      <a href="#" class="href btn btn-warning btn-circle">
+                      <a href="{% url 'fac:factura_edit' item.id %}" class="btn btn-warning btn-circle">
                           <i class="far fa-edit"></i>
                       </a>
                     </td>
                   </tr>
-                {% endfor %}
-                
+                {% endfor %} 
                 </tbody>
             </table>
           
@@ -159,12 +160,9 @@
           }
         })
 
-        
-
       }
-
+      
       let $table = $('#table')
-
       $(function() {
         $table.bootstrapTable()
 
