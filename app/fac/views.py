@@ -109,7 +109,10 @@ def facturas(request, id=None):
             detalle = FacturaDet.objects.filter(factura=enc)
 
         contexto = {'enc' : encabezado, 'det' : detalle, 'clientes' : clientes}
-    
+        print('******************************')
+        print(contexto)
+        print('******************************')
+        
     if request.method == "POST":
         cliente = request.POST.get('enc_cliente')
         fecha = request.POST.get('fecha')
