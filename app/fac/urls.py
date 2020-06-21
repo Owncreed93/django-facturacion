@@ -8,6 +8,7 @@ from .views import (
     FacturaView,
     facturas,
     ProductoView,
+    borrar_detalle_factura,
 )
 
 urlpatterns = [
@@ -22,4 +23,6 @@ urlpatterns = [
     path('facturas/edit/<int:id>', facturas, name="factura_edit"),
     # * FACTURAS - BÚSQUEDA PRODUCTO
     path('facturas/buscar-producto', ProductoView.as_view(), name='factura_producto'),
+    # * FACTURAS - BORRAR DETALLE
+    path('facturas/borrar-detalle/<int:id>', borrar_detalle_factura, name='factura_borrar_detalle'),
 ]

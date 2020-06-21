@@ -177,9 +177,11 @@
                                             <td>{{ item.sub_total}}</td>
                                             <td>{{ item.descuento}}</td>
                                             <td>{{ item.total }}</td>
-                                            {% comment %} <td>{{ item.estado|yesno:'Activo,Inactivo' }}</td> {% endcomment %}
                                             <td>
-                                                <button class="btn btn-warning btn-circle"><i class="far fa-edit"></i></button>
+                                                <button type="button" class="btn btn-warning btn-circle" 
+                                                        onclick="borrar_detalle({{ item.id }})">
+                                                        <i class="fas fa-history"></i>
+                                                </button>
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -326,5 +328,73 @@
         $('#descuento').val('{{ enc.descuento }}')
         $('#total').val({{ enc.total }})
     });
+
+    function borrar_detalle(id){
+        //mensaje(id)
+        $.confirm({
+            theme: 'modern',
+            icon: 'fab fa-keycdn',
+            type: 'red',
+            title: 'Confirmación requerida',
+            content: `url:/fac/facturas/borrar-detalle/${id}`,
+            onContentReady: function () {
+                let self = this;
+                this.$content.find('#usuario').val('{{ user.username }}')
+                this.$content.find('#usuario').select()
+                this.$content.find('#usuario').focus()
+            },
+            buttons: {
+                borrar: {
+                    text: 'Borrar', // text for button
+                    btnClass: 'btn btn-danger', // class for the button
+                    action: function(){
+                        let usuario = this.$content.find('input#usuario')
+                        let pass = this.$content.find('input#password')
+
+                        if(!usuario.val().trim()){
+                            mensaje('Usuario es requerido', 'red')
+                            return false
+                        }
+
+                        if(!pass.val().trim()){
+                            //$alert({
+                            //    title: 'Error',
+                            //    content: 'Contraseña es requerida',
+                            //    type: 'red' 
+                            //})
+                            mensaje('Contraseña es requerida', 'red')
+                            return false
+                        }
+
+                        let data = {'usuario': usuario.val(), 'pass':pass.val()}
+                        console.log(data)
+
+                        let token = '{{csrf_token}}'
+
+                        $.ajax({
+                            headers: { 'X-CSRFToken': token },
+                            type: 'POST',
+                            data: data,
+                            url: `/fac/facturas/borrar-detalle/${id}`,
+                            success: function(r){
+                                console.log(r)
+                                if(r==='ok'){
+                                    location.reload(true)
+                                }
+                                mensaje(r, 'red')
+                            },
+                            error: function(a,b,c){
+                                mensaje(c)
+                            }
+                        })
+                        
+                    }
+                },
+                cancelar: function (){
+                    
+                }
+            }
+        })
+    }
 </script>
 {% endblock js_page %}

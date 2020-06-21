@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
@@ -109,9 +110,6 @@ def facturas(request, id=None):
             detalle = FacturaDet.objects.filter(factura=enc)
 
         contexto = {'enc' : encabezado, 'det' : detalle, 'clientes' : clientes}
-        print('******************************')
-        print(contexto)
-        print('******************************')
         
     if request.method == "POST":
         cliente = request.POST.get('enc_cliente')
@@ -164,3 +162,39 @@ def facturas(request, id=None):
 
 class ProductoView(ProductoView):
     template_name = 'fac/buscar_producto.html'
+
+
+def borrar_detalle_factura(request, id):
+    template_name = 'fac/factura_borrar_detalle.html'
+
+    det = FacturaDet.objects.get(pk=id)
+
+    if request.method == 'GET':
+        context = {'det': det}
+
+    if request.method == 'POST':
+        usr = request.POST.get('usuario')
+        pas = request.POST.get('pass')
+
+        user = authenticate(username=usr, password=pas)
+
+        if not user:
+            return HttpResponse('Usuario o clave incorrecta')
+        
+        if not user.is_active:
+            return HttpResponse('Usuario Inactivo')
+    
+        if user.is_superuser or user.has_perm('fac.sup_caja_facturadet'):
+            # * CHANGE DE RECEIPT'S DETAIL ID TO NONE TO CREATE A NATURAL INVERSE TO THE ORIGINAL RECEIPT
+            det.id = None
+            det.cantidad = (-1 * det.cantidad)
+            det.sub_total = (-1 * det.sub_total)
+            det.descuento = (-1 * det.descuento)
+            det.total = (-1 * det.total)
+            det.save()
+
+            return HttpResponse('ok')
+        
+        return HttpResponse('Usuario no autorizado')
+    
+    return render(request, template_name, context)
