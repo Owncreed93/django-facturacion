@@ -208,7 +208,8 @@
 
           let d = new Date()
           if(f2=="" || f2==null){
-            f2 = d.getFullYear() +'-' +(d.getMonth()+1) +'-' +d.getDate() 
+            //f2 = d.getFullYear() +'-' +(d.getMonth()+1) +'-' +d.getDate()
+            f2 = `${d.getFullYear()}-${(d.getMonth()+1)}-${d.getDate()}`
             console.log(f2)
           }
 
