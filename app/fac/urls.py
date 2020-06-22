@@ -11,6 +11,10 @@ from .views import (
     borrar_detalle_factura,
 )
 
+from .reportes import (
+    imprimir_factura_recibo,
+)
+
 urlpatterns = [
     # * CLIENTES
     path('clientes/', ClienteView.as_view(), name='cliente_list'),
@@ -25,4 +29,6 @@ urlpatterns = [
     path('facturas/buscar-producto', ProductoView.as_view(), name='factura_producto'),
     # * FACTURAS - BORRAR DETALLE
     path('facturas/borrar-detalle/<int:id>', borrar_detalle_factura, name='factura_borrar_detalle'),
+    # * IMPRIMIR - FACTURAS
+    path('facturas/imprimir/<int:id>', imprimir_factura_recibo, name="factura_imprimir_one"),
 ]
