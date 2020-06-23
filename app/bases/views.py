@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy 
 from django.views.generic import (
@@ -12,7 +12,15 @@ from django.views.generic import (
 
 # Create your views here.
 
-class SinPrivilegios(LoginRequiredMixin, PermissionRequiredMixin):
+class MixinFormInvalid:
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        if self.request.is_ajax():
+            return JsonResponse(form.errors, status=400)
+        else:
+            response
+
+class SinPrivilegios(LoginRequiredMixin, PermissionRequiredMixin, MixinFormInvalid):
     login_url = 'bases:login'
     raise_exception = False
     redirect_field_name = 'redirect_to'

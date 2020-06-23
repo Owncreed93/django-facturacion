@@ -1,9 +1,9 @@
 <div class="modal-dialog modal-lg">
     <div class="modal-content">
         {% if obj %}
-            <form method="POST" role="form" class="form-inline" action="{% url 'cmp:proveedor_edit' obj.pk %}">
+        <form method="post" role="form" class="form-inline" action="{% url 'cmp:proveedor_edit' obj.pk %}">
         {% else %}
-            <form method="POST" role="form" class="form-inline" action="{% url 'cmp:proveedor_new' %}">
+        <form method="post" role="form" class="form-inline" action="{% url 'cmp:proveedor_new' %}">
         {% endif %}
             {% csrf_token %}
             <div class="col-xl-12 col-md-12 mb-12">
@@ -54,8 +54,40 @@
         </form>
     </div>
 </div>
-{% block js_page %}
+<script>
+    $(function() {
 
+        // * GETS THE URL PATH
+        let url = $('form').attr('action').val()
 
+        // * GETS THE MIDDLEWARE TOKEN
+        let token = $('input[name=csrfmiddlewaretoken]').val()
 
-{% endblock js_page %}
+        // * DEALING WITH THE FORM
+        $("form").submit(function(e) {
+            e.preventDefault()
+            //console.log(token)
+            //alert(token)
+            // SERIALIZE THE WHOLE FORM
+            let formData = $('form').serializeArray()
+
+            //console.log(formData)
+            $.ajax({
+                url: url,
+                method: "POST",
+                headers: { 'X-CSRFToken': token },
+                data: formData
+            })
+            .done(function (r, textStatus, xhr){
+                if(xhr.status == 200){
+                    location.reload(true)
+                } else {
+                    mensaje(textStatus)
+                }
+            })
+            .fail(function (error){
+                mensaje(error.responseText)
+            })
+        })
+    })
+</script>
