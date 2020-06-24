@@ -214,6 +214,13 @@ class ProductNew(VistaBaseCreate):
     form_class = ProductoForm
     success_url = reverse_lazy('inv:producto_list')
 
+    def get_context_data(self, **kwargs):
+        context = super(ProductNew, self).get_context_data(**kwargs)
+        context["categorias"] = Categoria.objects.all()
+        context["subcategorias"] = SubCategoria.objects.all()
+        return context
+    
+
 
 class ProductoEdit(VistaBaseEdit):
     permission_required = 'inv.change_producto'
@@ -221,6 +228,15 @@ class ProductoEdit(VistaBaseEdit):
     template_name = 'inv/producto_form.html'
     form_class = ProductoForm
     success_url = reverse_lazy('inv:producto_list')
+
+    def get_context_data(self, **kwargs):
+        pk = self.kwargs.get('pk')
+        
+        context = super(ProductoEdit, self).get_context_data(**kwargs)
+        context["categorias"] = Categoria.objects.all()
+        context["subcategorias"] = SubCategoria.objects.all()
+        context["obj"] = Producto.objects.filter(pk=pk).first()
+        return context
 
 
 @login_required(login_url='/login/')
