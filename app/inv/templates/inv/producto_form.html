@@ -136,7 +136,7 @@
         $('#id_categoria').val("{{ obj.subcategoria.categoria.id }}").change()
         // * SET THE SUBCATEGORY WHEN IT HAS PRE SET DATA
         $('#id_subcategoria').val("{{ obj.subcategoria.id }}").change()
-
+        // * CHAIN THE SUBCATEGORY TO THE CATEGORY
         $("#id_subcategoria").chained("#id_categoria");
     })
 </script>
