@@ -73,6 +73,20 @@ bcrypt = ["bcrypt"]
 
 [[package]]
 category = "main"
+description = "This is a Django library for Heroku apps."
+name = "django-heroku"
+optional = false
+python-versions = "*"
+version = "0.3.1"
+
+[package.dependencies]
+dj-database-url = ">=0.5.0"
+django = "*"
+psycopg2 = "*"
+whitenoise = "*"
+
+[[package]]
+category = "main"
 description = "A simple Django app that will give you a UserForeignKey model field."
 name = "django-userforeignkey"
 optional = false
@@ -413,7 +427,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "d89b9148a16f9df451fff8f76f261ad82705cc619e72a242eef126813357c719"
+content-hash = "4cc90e1007013198ace22c06acc6f09a3f7a644c770e246d375a0da365af008a"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -440,6 +454,10 @@ dj-database-url = [
 django = [
     {file = "Django-2.2-py3-none-any.whl", hash = "sha256:a2814bffd1f007805b19194eb0b9a331933b82bd5da1c3ba3d7b7ba16e06dc4b"},
     {file = "Django-2.2.tar.gz", hash = "sha256:7c3543e4fb070d14e10926189a7fcf42ba919263b7473dceaefce34d54e8a119"},
+]
+django-heroku = [
+    {file = "django-heroku-0.3.1.tar.gz", hash = "sha256:6af4bc3ae4a9b55eaad6dbe5164918982d2762661aebc9f83d9fa49f6009514e"},
+    {file = "django_heroku-0.3.1-py2.py3-none-any.whl", hash = "sha256:2bc690aab89eedbe01311752320a9a12e7548e3b0ed102681acc5736a41a4762"},
 ]
 django-userforeignkey = [
     {file = "django-userforeignkey-0.3.0.tar.gz", hash = "sha256:b5a675f1f09ca9b8c32a174caf7780f524f363c7d1c8ae0d30fdd0ce13268ca6"},
