@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'fac',
     'django_userforeignkey',
     'rest_framework',
-    'api'
+    'api',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
